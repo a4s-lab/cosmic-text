@@ -351,6 +351,7 @@ fn shape_run(
         &scripts,
         &line[start_run..end_run],
         attrs.weight,
+        &attrs,
     );
 
     let font = font_iter.next().expect("no default font found");
@@ -511,6 +512,7 @@ fn shape_skip(
         &[],
         "",
         attrs.weight,
+        &attrs,
     );
 
     let font = font_iter.next().expect("no default font found");
@@ -539,8 +541,15 @@ fn shape_skip(
             .stretch(attrs.stretch);
         let fb_fonts = font_system.get_font_matches(&fb_attrs);
         let fb_families = [&fb_family];
-        let mut fb_iter =
-            FontFallbackIter::new(font_system, &fb_fonts, &fb_families, &[], "", attrs.weight);
+        let mut fb_iter = FontFallbackIter::new(
+            font_system,
+            &fb_fonts,
+            &fb_families,
+            &[],
+            "",
+            attrs.weight,
+            &fb_attrs,
+        );
 
         if let Some(fb_font) = fb_iter.next() {
             let fb_swash = fb_font.as_swash();
@@ -1012,6 +1021,7 @@ impl ShapeSpan {
                             &[],
                             &probe_text,
                             attrs.weight,
+                            &attrs,
                         );
 
                         if let Some(font) = font_iter.next() {
