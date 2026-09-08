@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `FontFallbackIter::new` now takes the `Attrs` the font match keys were computed with: https://github.com/pop-os/cosmic-text/issues/518
 
+### Added
+
+- Add `SpanPadding` type and `Attrs::padding` builder (cherry-picked from upstream pop-os/cosmic-text@b4bd58ac)
+
 ## [0.19.0] - 2026-04-22
 
 ### Fixed
@@ -307,6 +311,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set default buffer wrap to `WordOrGlyph`
 
 ## Removed
+
 - Remove patch to load Redox system fonts, as fontdb does it now
 
 ## [0.10.0] - 2023-10-19
