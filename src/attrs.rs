@@ -609,6 +609,7 @@ impl AttrsOwned {
             && self.metrics_opt == other.metrics_opt
             && self.letter_spacing_opt == other.letter_spacing_opt
             && self.font_features == other.font_features
+            && self.padding == other.padding
     }
 
     pub fn new(attrs: &Attrs) -> Self {
