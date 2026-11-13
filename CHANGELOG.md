@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Cache monospace fallback candidates to speed up `Family::Monospace` shaping: https://github.com/pop-os/cosmic-text/issues/518
+- A span with a line height smaller than the buffer's base line height no longer reduces the height of a line that contains content at the base line height: the bigger height wins, and the span's line height only applies when the line's content fully overrides it (e.g. a line that is entirely within such a span, or an empty line inside it)
+- `Buffer::hit` no longer returns a cursor at the end of the line when the click falls within a span's padding (a glyph-free gap between clusters): it now places the cursor at the padding boundary, on the edge of the nearest glyph, using the cluster's BiDi level to pick the logical before/after side
+
+### Changed
+
+- `FontFallbackIter::new` now takes the `Attrs` the font match keys were computed with: https://github.com/pop-os/cosmic-text/issues/518
+- Add `LayoutLine::uses_base_line_height` and `LayoutLine::line_height(base)`, which computes the final line height: the max of the base line height and the spans' line heights when the line contains content at the base line height, or just the spans' line height when the line's content fully overrides it
+
+### Added
+
+- Add `SpanPadding` type and `Attrs::padding` builder (cherry-picked from upstream pop-os/cosmic-text@b4bd58ac)
+
+### Changed
+
+- Plug `SpanPadding` into shape/layout calculations: horizontal (`start`/`end`) padding is attributed to words, included in word widths (so wrapping and ellipsization account for it) and placed at the boundary's byte offset — inside a word it is emitted between the two adjacent glyph clusters at that offset (sub-word precision), and at a word's edges on the word's BiDi-aware x-stream edges; `top`/`bottom` padding inflates the line's `max_ascent`/`max_descent`
+
 ## [0.19.0] - 2026-04-22
 
 ### Fixed
@@ -297,6 +318,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set default buffer wrap to `WordOrGlyph`
 
 ## Removed
+
 - Remove patch to load Redox system fonts, as fontdb does it now
 
 ## [0.10.0] - 2023-10-19
